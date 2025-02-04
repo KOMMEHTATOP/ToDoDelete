@@ -9,16 +9,27 @@
     <Grid>
         <ListView Name="TaskList" ItemsSource="{Binding Tasks, RelativeSource={RelativeSource AncestorType=UserControl}}"
                   Background="DarkSeaGreen">
-            
+
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsCompleted}" Value="True">
+                            <Setter Property="Background" Value="Red"/>
+                        </DataTrigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{Binding (SystemColors.HighlightBrush)}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                    
                 </Style>
             </ListView.ItemContainerStyle>
+
 
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="Gray">
+                        
                         <Grid Background="White">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -26,13 +37,14 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <CheckBox Grid.Column="0" IsChecked="{Binding IsCompleted}"/>
+                            <CheckBox Grid.Column="0" 
+                                      IsChecked="{Binding IsCompleted, Mode=TwoWay}"/>
 
-                            <TextBlock Grid.Column="1" Text="{Binding Title}" Margin="10,0" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Title}" Margin="0" VerticalAlignment="Center"/>
 
                             <Button Grid.Column="2"
                                     Content="Удалить"
-                                    Command="{Binding DataContext.DeleteTask, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    Command="{Binding DataContext.DeleteTaskCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                     CommandParameter="{Binding}"
                                     Margin="0,0,10,0">
                             </Button>

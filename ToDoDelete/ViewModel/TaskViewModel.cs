@@ -15,11 +15,19 @@ namespace ToDoDelete.ViewModel
         public TaskViewModel()
         {
             _taskCollection = new ObservableCollection<TaskItem>();
-            _taskCheckBox = new CheckBox();
             _newTaskTitle = string.Empty;
             AddTaskCommand = new RelayCommand(AddTask, CanAddTask);
             DeleteTaskCommand = new RelayCommand(DeleteTask, CanDeleteTask);
-            IsCompliteCommand = new RelayCommand(CompleteTask, CanCompleteTask);
+            IsCompliteCommand = new RelayCommand(CompleteTask);
+
+        }
+
+        private void CompleteTask(object obj)
+        {
+            if (obj is TaskItem task)
+            {
+                task.IsCompleted = !task.IsCompleted;
+            }
         }
 
         private bool CanAddTask(object? arg)
@@ -38,29 +46,15 @@ namespace ToDoDelete.ViewModel
 
         private bool CanDeleteTask(object? arg)
         {
-            MessageBox.Show($"фывафываыфва");
-
             return arg is TaskItem;
         }
 
         private void DeleteTask(object? obj)
         {
-            MessageBox.Show($"Received object: {obj?.ToString()}");
             if (obj is TaskItem taskToDelete)
             {
                 TaskCollection.Remove(taskToDelete);
             }
-        }
-
-        private bool CanCompleteTask(object? arg)
-        {
-            // Implement logic to determine if a task can be marked as complete
-            return true;
-        }
-
-        private void CompleteTask(object? obj)
-        {
-            // Implement logic to mark a task as complete
         }
 
         private ObservableCollection<TaskItem> _taskCollection;
@@ -71,17 +65,6 @@ namespace ToDoDelete.ViewModel
             {
                 _taskCollection = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TaskCollection)));
-            }
-        }
-
-        private CheckBox _taskCheckBox;
-        public CheckBox TaskCheckBox
-        {
-            get { return _taskCheckBox; }
-            set
-            {
-                _taskCheckBox = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TaskCheckBox)));
             }
         }
 
